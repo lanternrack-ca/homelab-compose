@@ -1,0 +1,22 @@
+services:
+  thinkrail:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: thinkrail-app:v0.3.0
+    container_name: thinkrail-app
+    ports:
+      - "127.0.0.1:${THINKRAIL_PORT}:24242"
+    volumes:
+      - "${REPO_PATH}:/workspace"
+      - thinkrail-data:/root/.thinkrail
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://localhost:24242/health || exit 1"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+      start_period: 5s
+
+volumes:
+  thinkrail-data:

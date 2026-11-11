@@ -1,0 +1,29 @@
+services:
+  pocket-id:
+    container_name: pocket-id-app
+    image: pocketid/pocket-id:v2
+    restart: unless-stopped
+    ports:
+      - "${PORT:-3000}:1411"
+    environment:
+      - APP_URL=${APP_URL}
+      - ENCRYPTION_KEY=${ENCRYPTION_KEY}
+      - TRUST_PROXY=false
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - LOG_LEVEL=${LOG_LEVEL:-info}
+    volumes:
+      - ./data:/app/data
+    healthcheck:
+      test: ["CMD", "/app/pocket-id", "healthcheck"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    networks:
+      - pocketid-net
+
+networks:
+  pocketid-net:
+    name: pocket-id-net
+    driver: bridge

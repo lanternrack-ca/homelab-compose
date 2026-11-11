@@ -1,0 +1,62 @@
+services:
+  attic:
+    image: ghcr.io/lmmendes/attic:latest
+    container_name: attic-app
+    user: "0:0"
+    ports:
+      - "127.0.0.1:${HOST_PORT}:8080"
+    environment:
+      - ATTIC_PORT=8080
+      - ATTIC_DATABASE_URL=postgres://attic:${POSTGRES_PASSWORD}@postgres:5432/attic?sslmode=disable
+      - ATTIC_LOCAL_STORAGE_PATH=/data/uploads
+      - ATTIC_SESSION_SECRET=${ATTIC_SESSION_SECRET}
+      - ATTIC_BASE_URL=http://localhost:${HOST_PORT}
+      - ATTIC_CORS_ORIGINS=http://localhost:${HOST_PORT},http://127.0.0.1:${HOST_PORT}
+      - ATTIC_ADMIN_EMAIL=admin
+      - ATTIC_ADMIN_PASSWORD=${ATTIC_ADMIN_PASSWORD:?set ATTIC_ADMIN_PASSWORD in .env}
+      - ATTIC_AUTH_DISABLED=false
+      - ATTIC_OIDC_ENABLED=false
+    volumes:
+      - attic_uploads:/data/uploads
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - attic-net
+    healthcheck:
+      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://127.0.0.1:8080/health || exit 1"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+      start_period: 5s
+
+  postgres:
+    image: postgres:16-alpine
+    container_name: attic-db
+    environment:
+      POSTGRES_USER: attic
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: attic
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U attic -d attic"]
+      interval: 3s
+      timeout: 3s
+      retries: 10
+      start_period: 3s
+    restart: unless-stopped
+    networks:
+      - attic-net
+
+volumes:
+  postgres_data:
+    name: attic_postgres_data
+  attic_uploads:
+    name: attic_uploads
+
+networks:
+  attic-net:
+    name: attic_net
+    driver: bridge

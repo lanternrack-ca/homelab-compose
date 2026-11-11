@@ -1,0 +1,25 @@
+services:
+  navidrome:
+    image: deluan/navidrome:latest
+    container_name: navidrome-app
+    ports:
+      - "127.0.0.1:${NAVIDROME_PORT:-3000}:4533"
+    environment:
+      ND_MUSICFOLDER: /music
+      ND_DATAFOLDER: /data
+      ND_SCANNER_SCHEDULE: "@every 1m"
+      ND_LOGLEVEL: info
+      ND_ENABLESHARING: "true"
+      ND_ENABLEDOWNLOADS: "true"
+      ND_ENABLETRANSCODINGCONFIG: "true"
+      ND_PROMETHEUS_ENABLED: "true"
+    volumes:
+      - ./music:/music:ro
+      - ./data:/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://127.0.0.1:4533/ping || exit 1"]
+      interval: 5s
+      timeout: 3s
+      retries: 12
+      start_period: 4s

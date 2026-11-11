@@ -1,0 +1,21 @@
+services:
+  sonarr:
+    image: ${IMAGE}
+    container_name: sonarr-sonarr
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    ports:
+      - "127.0.0.1:${SONARR_PORT}:8989"
+    volumes:
+      - "./config:/config"
+      - "./tv:/tv"
+      - "./downloads:/downloads"
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://127.0.0.1:8989/ping || exit 1"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+      start_period: 10s
+    restart: unless-stopped

@@ -1,0 +1,27 @@
+services:
+  server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: termcraft-server
+    user: "$(id -u):$(id -g)"
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:25565:25565"
+    volumes:
+      - "./data:/data"
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+
+  web:
+    image: nginx:alpine
+    container_name: termcraft-web
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:3000:80"
+    volumes:
+      - "./web:/usr/share/nginx/html:ro"
+    security_opt:
+      - no-new-privileges:true

@@ -1,0 +1,26 @@
+services:
+  ntfy:
+    image: binwiederhier/ntfy:latest
+    container_name: ntfy-app
+    command:
+      - serve
+      - --config
+      - /etc/ntfy/server.yml
+    environment:
+      - TZ=UTC
+    ports:
+      - "127.0.0.1:3000:80"
+    volumes:
+      - ./config/server.yml:/etc/ntfy/server.yml:ro
+      - ntfy_cache:/var/cache/ntfy
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q --spider http://127.0.0.1:80/v1/health || exit 1"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+      start_period: 3s
+
+volumes:
+  ntfy_cache:
+    name: ntfy_cache

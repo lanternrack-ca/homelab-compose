@@ -1,0 +1,28 @@
+services:
+  rdtclient:
+    image: ${RDT_IMAGE:-rogerfar/rdtclient}:${RDT_TAG:-latest}
+    container_name: rdt-client-server
+    pull_policy: missing
+    restart: unless-stopped
+    ports:
+      - "${RDT_PORT:-3000}:6500"
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ:-Etc/UTC}
+    volumes:
+      - ./data/db:/data/db
+      - ./data/downloads:/data/downloads
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS -o /dev/null http://localhost:6500/ || exit 1"]
+      interval: 5s
+      timeout: 3s
+      retries: 30
+      start_period: 10s
+networks:
+  default:
+    name: rdt-client-net

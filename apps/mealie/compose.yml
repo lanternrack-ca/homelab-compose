@@ -1,0 +1,26 @@
+services:
+  mealie:
+    image: ghcr.io/mealie-recipes/mealie:v3.30.0
+    container_name: ${PROJ:-mealie}-server
+    restart: unless-stopped
+    ports:
+      - "${MEALIE_PORT:-3000}:9000"
+    deploy:
+      resources:
+        limits:
+          memory: 1000M
+    volumes:
+      - ./data:/app/data/
+    environment:
+      - ALLOW_SIGNUP=${ALLOW_SIGNUP:-true}
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ:-UTC}
+      - BASE_URL=${BASE_URL:-http://localhost:3000}
+      - DB_ENGINE=${DB_ENGINE:-sqlite}
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsk http://127.0.0.1:9000/api/app/about > /dev/null || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 15s

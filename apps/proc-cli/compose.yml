@@ -1,0 +1,24 @@
+services:
+  web:
+    build:
+      context: .
+      dockerfile: web/Dockerfile
+    container_name: proc-docs-web
+    ports:
+      - "127.0.0.1:3000:80"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q -O /dev/null http://127.0.0.1/ || exit 1"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+      start_period: 5s
+
+  proc:
+    image: yazeed/proc-cli:latest
+    container_name: proc-cli-runner
+    pid: "host"
+    network_mode: "host"
+    command: ["ports"]
+    profiles:
+      - cli-tools

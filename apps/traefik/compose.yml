@@ -1,0 +1,26 @@
+services:
+  traefik:
+    image: traefik:v3.7
+    command:
+      - --api.insecure=true
+      - --ping=true
+      - --providers.docker=true
+      - --providers.docker.exposedbydefault=false
+      - --entrypoints.web.address=:80
+    ports:
+      - "127.0.0.1:3000:8080"
+      - "127.0.0.1:8000:80"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    healthcheck:
+      test: ["CMD", "traefik", "healthcheck", "--ping"]
+      interval: 3s
+      timeout: 2s
+      retries: 5
+
+  whoami:
+    image: traefik/whoami
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.whoami.rule=Host(`whoami.localhost`) || PathPrefix(`/whoami`)
+      - traefik.http.routers.whoami.entrypoints=web

@@ -1,0 +1,21 @@
+services:
+  vaultwarden:
+    image: vaultwarden/server:latest
+    restart: unless-stopped
+    env_file: .env
+    volumes:
+      - ./vw-data:/data
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:80/alive || exit 1"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  caddy:
+    image: caddy:2
+    restart: unless-stopped
+    ports:
+      - "8443:8443"
+    command: caddy reverse-proxy --from https://localhost:8443 --to vaultwarden:80 --internal-certs
+    depends_on:
+      - vaultwarden

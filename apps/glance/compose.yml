@@ -1,0 +1,18 @@
+services:
+  glance:
+    image: ${IMAGE:-glanceapp/glance:latest}
+    container_name: ${PROJ:-glance}-app
+    ports:
+      - "127.0.0.1:${HOST_PORT:-3000}:8080"
+    volumes:
+      - ./config:/app/config:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    environment:
+      - TZ=UTC
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://127.0.0.1:8080/api/healthz || exit 1"]
+      interval: 3s
+      timeout: 3s
+      retries: 5
+      start_period: 2s
+    restart: unless-stopped

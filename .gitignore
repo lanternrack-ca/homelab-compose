@@ -1,0 +1,7 @@
+.env
+**/.env
+**/data/
+**/config/
+**/library/
+**/postgres/
+.upstream-licenses.json

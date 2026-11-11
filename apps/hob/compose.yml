@@ -1,0 +1,26 @@
+services:
+  hob:
+    build:
+      context: .
+      args:
+        HOB_VERSION: ${HOB_VERSION}
+        HOB_SHA512: ${HOB_SHA512}
+      dockerfile: Dockerfile
+    image: hob:${HOB_VERSION}
+    init: true
+    shm_size: 1gb
+    ports:
+      - "127.0.0.1:${HOB_WEB_PORT}:6080"
+      - "127.0.0.1:${HOB_CDP_PORT}:9223"
+    environment:
+      HOB_FAKE: "1"
+      HOB_BACKGROUND: "0"
+      HOB_SYSTEM_LANGUAGES: en-US
+      HOB_USER_DATA: /data/profile
+      HOB_FAKE_STEP_MS: "1500"
+      RECORD: ${RECORD:-}
+    volumes:
+      - hob-data:/data
+    restart: "no"
+volumes:
+  hob-data:

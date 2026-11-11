@@ -1,0 +1,28 @@
+services:
+  narratarr:
+    image: ${NARRATARR_IMAGE:-ghcr.io/narratarr/narratarr}:${NARRATARR_TAG:-latest}
+    container_name: narratarr-server
+    pull_policy: missing
+    restart: unless-stopped
+    ports:
+      - "${HOST_PORT:-3000}:8484"
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ:-Etc/UTC}
+    volumes:
+      - ./config:/config
+      - ./audiobooks:/audiobooks
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
+    healthcheck:
+      test: ["CMD-SHELL", "python -c \"import urllib.request; urllib.request.urlopen('http://127.0.0.1:8484/api/health', timeout=3)\""]
+      interval: 5s
+      timeout: 4s
+      retries: 30
+      start_period: 10s
+networks:
+  default:
+    name: narratarr-net

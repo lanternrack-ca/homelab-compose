@@ -1,0 +1,35 @@
+services:
+  dozzle:
+    image: amir20/dozzle:latest
+    container_name: dozzle
+    ports:
+      - "127.0.0.1:3000:8080"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - dozzle_data:/data
+    environment:
+      - DOZZLE_DISABLE_SETUP_WIZARD=true
+      - DOZZLE_ENABLE_ACTIONS=true
+      - DOZZLE_ENABLE_SHELL=true
+      - DOZZLE_NO_ANALYTICS=true
+      - DOZZLE_LEVEL=info
+    healthcheck:
+      test: ["CMD", "/dozzle", "healthcheck"]
+      interval: 3s
+      timeout: 3s
+      retries: 5
+      start_period: 2s
+    restart: unless-stopped
+
+  # Companion container emitting steady synthetic log output for verification
+  log-generator:
+    image: alpine:3
+    container_name: dozzle-logger
+    command:
+      - sh
+      - -c
+      - 'i=0; while true; do i=$$((i+1)); echo "$$(date -Iseconds) [INFO] api-worker-$$((i % 3 + 1)): processed event #$$i status=ok latency=$$((RANDOM % 40 + 10))ms"; sleep 1; done'
+    restart: unless-stopped
+
+volumes:
+  dozzle_data:

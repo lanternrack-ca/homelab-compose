@@ -1,0 +1,18 @@
+services:
+  tautulli:
+    container_name: tautulli-app
+    image: ghcr.io/tautulli/tautulli:latest
+    restart: unless-stopped
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ:-UTC}
+    ports:
+      - "${TAUTULLI_PORT}:8181"
+    volumes:
+      - ./config:/config
+    networks:
+      - tautulli
+
+networks:
+  tautulli:

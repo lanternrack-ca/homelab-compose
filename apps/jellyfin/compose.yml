@@ -1,0 +1,29 @@
+services:
+  jellyfin:
+    container_name: jellyfin-app
+    image: jellyfin/jellyfin:latest
+    pull_policy: missing
+    user: ${UID_GID}
+    hostname: jellyfin
+    restart: unless-stopped
+    ports:
+      - "${PORT:-3000}:8096"
+    environment:
+      - TZ=${TZ:-Etc/UTC}
+      - JELLYFIN_PublishedServerUrl=${JELLYFIN_PublishedServerUrl}
+    volumes:
+      - ./config:/config
+      - ./cache:/cache
+      - ./media:/media
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://localhost:8096/health || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 20s
+    networks:
+      - jellyfin
+
+networks:
+  jellyfin:
+    name: jellyfin-net

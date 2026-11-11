@@ -1,0 +1,71 @@
+x-authentik-env: &ak-env
+  AUTHENTIK_POSTGRESQL__HOST: postgresql
+  AUTHENTIK_POSTGRESQL__NAME: ${PG_DB:-authentik}
+  AUTHENTIK_POSTGRESQL__USER: ${PG_USER:-authentik}
+  AUTHENTIK_POSTGRESQL__PASSWORD: ${PG_PASS}
+  AUTHENTIK_SECRET_KEY: ${AUTHENTIK_SECRET_KEY:?secret key required}
+
+services:
+  postgresql:
+    container_name: authentik-db
+    image: docker.io/library/postgres:16-alpine
+    pull_policy: missing
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${PG_DB:-authentik}
+      POSTGRES_USER: ${PG_USER:-authentik}
+      POSTGRES_PASSWORD: ${PG_PASS:?database password required}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+    volumes:
+      - database:/var/lib/postgresql/data
+
+  server:
+    container_name: authentik-server
+    image: ghcr.io/goauthentik/server:${AUTHENTIK_TAG}
+    pull_policy: missing
+    command: server
+    restart: unless-stopped
+    env_file: [.env]
+    environment: *ak-env
+    ports:
+      - "${COMPOSE_PORT_HTTP:-9000}:9000"
+      - "${COMPOSE_PORT_HTTPS:-9443}:9443"
+    shm_size: 512mb
+    volumes:
+      - ./data:/data
+      - ./custom-templates:/templates
+      - ./blueprints:/blueprints/custom
+    depends_on:
+      postgresql:
+        condition: service_healthy
+
+  worker:
+    container_name: authentik-worker
+    image: ghcr.io/goauthentik/server:${AUTHENTIK_TAG}
+    pull_policy: missing
+    command: worker
+    restart: unless-stopped
+    env_file: [.env]
+    environment: *ak-env
+    shm_size: 512mb
+    volumes:
+      - ./data:/data
+      - ./certs:/certs
+      - ./custom-templates:/templates
+      - ./blueprints:/blueprints/custom
+    depends_on:
+      postgresql:
+        condition: service_healthy
+
+volumes:
+  database:
+    name: authentik-pgdata
+
+networks:
+  default:
+    name: authentik-net

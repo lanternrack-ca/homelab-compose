@@ -1,0 +1,22 @@
+services:
+  syncthing:
+    image: syncthing/syncthing:latest
+    container_name: syncthing
+    hostname: syncthing-demo-node
+    environment:
+      - PUID=1000
+      - PGID=1000
+    ports:
+      - "3000:8384"          # Web GUI (upstream default is 8384:8384)
+      - "22000:22000/tcp"    # Sync protocol (TCP)
+      - "22000:22000/udp"    # Sync protocol (QUIC)
+      - "21027:21027/udp"    # Local discovery
+    volumes:
+      - ./data:/var/syncthing
+      - ./config:/var/syncthing/config
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fkLsS -m 2 http://127.0.0.1:8384/rest/noauth/health | grep -q OK"]
+      interval: 10s
+      timeout: 5s
+      retries: 6

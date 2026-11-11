@@ -1,0 +1,38 @@
+services:
+  traefik:
+    image: traefik:v3.6
+    command:
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+    ports:
+      - "3000:80"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+    restart: unless-stopped
+
+  whoami:
+    image: traefik/whoami:latest
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.whoami.rule: "Host(`whoami.127.0.0.1.sslip.io`)"
+      traefik.http.routers.whoami.middlewares: "tinyauth"
+      traefik.http.services.whoami.loadbalancer.server.port: "80"
+    restart: unless-stopped
+
+  tinyauth:
+    image: ghcr.io/tinyauthapp/tinyauth:v5
+    environment:
+      - TINYAUTH_APPURL=http://tinyauth.127.0.0.1.sslip.io:3000
+      - TINYAUTH_AUTH_USERS=${TINYAUTH_AUTH_USERS:?set TINYAUTH_AUTH_USERS in .env}
+      - TINYAUTH_AUTH_LOGINMAXRETRIES=0
+      - TINYAUTH_DATABASE_DRIVER=sqlite
+      - TINYAUTH_DATABASE_PATH=/data/tinyauth.db
+    volumes:
+      - ./data:/data
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.tinyauth.rule: "Host(`tinyauth.127.0.0.1.sslip.io`)"
+      traefik.http.services.tinyauth.loadbalancer.server.port: "3000"
+      traefik.http.middlewares.tinyauth.forwardauth.address: "http://tinyauth:3000/api/auth/traefik"
+      traefik.http.middlewares.tinyauth.forwardauth.authResponseHeaders: "remote-user,remote-name,remote-email,remote-groups"
+    restart: unless-stopped

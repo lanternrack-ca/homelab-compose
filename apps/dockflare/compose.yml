@@ -1,0 +1,77 @@
+services:
+  docker-socket-proxy:
+    image: tecnativa/docker-socket-proxy:v0.4.1
+    restart: unless-stopped
+    environment:
+      - CONTAINERS=1
+      - EVENTS=1
+      - NETWORKS=1
+      - IMAGES=1
+      - POST=1
+      - PING=1
+      - INFO=1
+      - EXEC=1
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    networks:
+      - dockflare-internal
+
+  dockflare-init:
+    image: alpine:3.20
+    command: ["sh", "-c", "chown -R ${DOCKFLARE_UID:-65532}:${DOCKFLARE_GID:-65532} /app/data"]
+    volumes:
+      - dockflare_data:/app/data
+    network_mode: none
+    restart: "no"
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    command: ["redis-server", "--save", "", "--appendonly", "no"]
+    networks:
+      - dockflare-internal
+
+  dockflare:
+    image: alplat/dockflare:stable
+    restart: unless-stopped
+    ports:
+      - "${DOCKFLARE_PORT}:5000"
+    volumes:
+      - dockflare_data:/app/data
+    environment:
+      - REDIS_URL=redis://redis:6379/0
+      - DOCKER_HOST=tcp://docker-socket-proxy:2375
+      - INTERNAL_BOOTSTRAP_SECRET=${INTERNAL_BOOTSTRAP_SECRET}
+      - DOCKFLARE_API_KEY=${DOCKFLARE_API_KEY}
+      - CLOUDFLARED_NETWORK_NAME=dockflare-cf
+      - LOG_LEVEL=INFO
+    depends_on:
+      docker-socket-proxy:
+        condition: service_started
+      redis:
+        condition: service_started
+      dockflare-init:
+        condition: service_completed_successfully
+    networks:
+      - cf-net
+      - dockflare-internal
+
+  # Example workload container with declarative DockFlare labels
+  whoami:
+    image: traefik/whoami:latest
+    restart: unless-stopped
+    labels:
+      - "dockflare.enable=true"
+      - "dockflare.hostname=whoami.demo.example.com"
+      - "dockflare.service=http://whoami:80"
+    networks:
+      - cf-net
+
+volumes:
+  dockflare_data:
+
+networks:
+  cf-net:
+    name: dockflare-cf
+  dockflare-internal:
+    name: dockflare-internal
