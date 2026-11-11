@@ -1,0 +1,20 @@
+name: copyparty
+services:
+  copyparty:
+    container_name: copyparty-server
+    image: copyparty/ac:latest
+    user: "1000:1000"
+    ports:
+      - "3000:3923"
+    volumes:
+      - ./cfg:/cfg:z
+      - ./share:/w:z
+    environment:
+      PYTHONUNBUFFERED: "1"
+    stop_grace_period: 15s
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "wget --spider -q 127.0.0.1:3923/ || exit 1"]
+      interval: 5s
+      timeout: 3s
+      retries: 10

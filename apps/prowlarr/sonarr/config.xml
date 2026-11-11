@@ -1,0 +1,13 @@
+<Config>
+  <BindAddress>*</BindAddress>
+  <Port>8989</Port>
+  <ApiKey>CHANGE-ME-SONARR_KEY</ApiKey>
+  <AuthenticationMethod>None</AuthenticationMethod>
+  <Branch>main</Branch>
+  <LogLevel>info</LogLevel>
+  <UrlBase></UrlBase>
+  <InstanceName>Sonarr</InstanceName>
+  <AnalyticsEnabled>False</AnalyticsEnabled>
+  <LaunchBrowser>False</LaunchBrowser>
+  <UpdateMechanism>Docker</UpdateMechanism>
+</Config>

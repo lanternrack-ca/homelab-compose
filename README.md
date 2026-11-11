@@ -10,7 +10,7 @@ cp .env.example .env     # change every change-me value
 docker compose up -d
 ```
 
-## Apps (54)
+## Apps (58)
 
 | App | Tested version | Lab-tested | Guide |
 |---|---|---|---|
@@ -26,6 +26,7 @@ docker compose up -d
 | [Bazarr](apps/bazarr/) | v1.6.2-ls371 | 2026-11-06 | [guide](https://lanternrack.ca/guides/bazarr/) |
 | [Chatto](apps/chatto/) | — | — | [guide](https://lanternrack.ca/guides/chatto/) |
 | [Cinephage](apps/cinephage/) | — | — | [guide](https://lanternrack.ca/guides/cinephage/) |
+| [copyparty](apps/copyparty/) | v1.20.26 | 2026-11-11 | [guide](https://lanternrack.ca/guides/copyparty/) |
 | [Dispatcharr](apps/dispatcharr/) | — | — | [guide](https://lanternrack.ca/guides/dispatcharr/) |
 | [DockFlare](apps/dockflare/) | — | — | [guide](https://lanternrack.ca/guides/dockflare/) |
 | [Dockpeek](apps/dockpeek/) | — | — | [guide](https://lanternrack.ca/guides/dockpeek/) |
@@ -33,14 +34,17 @@ docker compose up -d
 | [Glance](apps/glance/) | — | — | [guide](https://lanternrack.ca/guides/glance/) |
 | [Grafana](apps/grafana/) | 13.3.0 | 2026-11-08 | [guide](https://lanternrack.ca/guides/grafana/) |
 | [Grimoire](apps/grimoire/) | — | — | [guide](https://lanternrack.ca/guides/grimoire/) |
+| [Heimdall](apps/heimdall/) | v2.8.4-ls372 | 2026-11-11 | [guide](https://lanternrack.ca/guides/heimdall/) |
 | [Hob, the Open-Source Local AI Desktop App, in a Throwaway Docker Container](apps/hob/) | — | — | [guide](https://lanternrack.ca/guides/hob/) |
 | [Homarr](apps/homarr/) | — | — | [guide](https://lanternrack.ca/guides/homarr/) |
 | [Homelab Atlas](apps/homelab-atlas/) | — | — | [guide](https://lanternrack.ca/guides/homelab-atlas/) |
 | [Immich](apps/immich/) | v3.3.6 | 2026-11-08 | [guide](https://lanternrack.ca/guides/immich/) |
 | [Infisical](apps/infisical/) | — | — | [guide](https://lanternrack.ca/guides/infisical/) |
 | [Jellyfin](apps/jellyfin/) | 12.4.0 | 2026-11-06 | [guide](https://lanternrack.ca/guides/jellyfin/) |
+| [Kavita](apps/kavita/) | v0.9.1.4 | 2026-11-11 | [guide](https://lanternrack.ca/guides/kavita/) |
 | [Kestra](apps/kestra/) | — | — | [guide](https://lanternrack.ca/guides/kestra/) |
 | [LightPost, a One-Dashboard Social Media Scheduler,](apps/lightpost/) | — | — | [guide](https://lanternrack.ca/guides/lightpost/) |
+| [Linkwarden](apps/linkwarden/) | v2.17.0 | 2026-11-11 | [guide](https://lanternrack.ca/guides/linkwarden/) |
 | [Listenarr](apps/listenarr/) | — | — | [guide](https://lanternrack.ca/guides/listenarr/) |
 | [Mealie](apps/mealie/) | — | — | [guide](https://lanternrack.ca/guides/mealie/) |
 | [Narratarr](apps/narratarr/) | 0.9.4 | 2026-11-08 | [guide](https://lanternrack.ca/guides/narratarr/) |

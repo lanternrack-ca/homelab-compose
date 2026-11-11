@@ -19,6 +19,8 @@ docker compose up -d
 
 Open http://localhost:3000 (set the port in `.env`).
 
+This folder also has `config/qBittorrent/qBittorrent.conf`, which `compose.yml` mounts. Replace each `CHANGE-ME-…` value in it first; the guide shows how to generate them.
+
 The step-by-step walkthrough, first-run setup and troubleshooting are in the [full guide](https://lanternrack.ca/guides/qbittorrent/).
 
 ---
