@@ -1,0 +1,50 @@
+services:
+  socket-proxy:
+    image: lscr.io/linuxserver/socket-proxy:latest
+    container_name: socket-proxy-proxy
+    restart: unless-stopped
+    read_only: true
+    tmpfs:
+      - /run
+    ports:
+      - "127.0.0.1:3000:2375"
+    environment:
+      - LOG_LEVEL=info
+      - DISABLE_IPV6=0
+      - PING=1
+      - VERSION=1
+      - EVENTS=1
+      - INFO=1
+      - CONTAINERS=1
+      - IMAGES=1
+      - NETWORKS=1
+      - VOLUMES=1
+      - POST=0
+      - BUILD=0
+      - COMMIT=0
+      - CONFIGS=0
+      - DISTRIBUTION=0
+      - EXEC=0
+      - NODES=0
+      - PLUGINS=0
+      - SECRETS=0
+      - SERVICES=0
+      - SESSION=0
+      - SWARM=0
+      - SYSTEM=0
+      - TASKS=0
+      - ALLOW_START=0
+      - ALLOW_STOP=0
+      - ALLOW_RESTARTS=0
+      - ALLOW_PAUSE=0
+      - ALLOW_UNPAUSE=0
+      - ALLOW_LOGS=1
+      - TZ=Etc/UTC
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q -O - http://127.0.0.1:2375/_ping | grep -q OK || exit 1"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+      start_period: 3s

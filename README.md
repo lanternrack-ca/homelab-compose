@@ -10,7 +10,7 @@ cp .env.example .env     # change every change-me value
 docker compose up -d
 ```
 
-## Apps (58)
+## Apps (59)
 
 | App | Tested version | Lab-tested | Guide |
 |---|---|---|---|
@@ -28,6 +28,7 @@ docker compose up -d
 | [Cinephage](apps/cinephage/) | — | — | [guide](https://lanternrack.ca/guides/cinephage/) |
 | [copyparty](apps/copyparty/) | v1.20.26 | 2026-11-11 | [guide](https://lanternrack.ca/guides/copyparty/) |
 | [Dispatcharr](apps/dispatcharr/) | — | — | [guide](https://lanternrack.ca/guides/dispatcharr/) |
+| [docker-socket-proxy](apps/docker-socket-proxy/) | 3.4.7-r0-ls105 | 2026-11-14 | [guide](https://lanternrack.ca/guides/docker-socket-proxy/) |
 | [DockFlare](apps/dockflare/) | — | — | [guide](https://lanternrack.ca/guides/dockflare/) |
 | [Dockpeek](apps/dockpeek/) | — | — | [guide](https://lanternrack.ca/guides/dockpeek/) |
 | [Dozzle](apps/dozzle/) | — | — | [guide](https://lanternrack.ca/guides/dozzle/) |
