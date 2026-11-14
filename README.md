@@ -10,7 +10,7 @@ cp .env.example .env     # change every change-me value
 docker compose up -d
 ```
 
-## Apps (59)
+## Apps (60)
 
 | App | Tested version | Lab-tested | Guide |
 |---|---|---|---|
@@ -70,6 +70,7 @@ docker compose up -d
 | [Tinyauth](apps/tinyauth/) | — | — | [guide](https://lanternrack.ca/guides/tinyauth/) |
 | [Tracearr](apps/tracearr/) | v3.1.3 | 2026-11-02 | [guide](https://lanternrack.ca/guides/tracearr/) |
 | [Traefik](apps/traefik/) | — | — | [guide](https://lanternrack.ca/guides/traefik/) |
+| [traefik-certs-dumper](apps/traefik-certs-dumper/) | 1.8.32 | 2026-11-14 | [guide](https://lanternrack.ca/guides/traefik-certs-dumper/) |
 | [TREK](apps/trek/) | — | — | [guide](https://lanternrack.ca/guides/trek/) |
 | [Umami](apps/umami/) | — | — | [guide](https://lanternrack.ca/guides/umami/) |
 | [Vaultwarden](apps/vaultwarden/) | — | — | [guide](https://lanternrack.ca/guides/vaultwarden/) |

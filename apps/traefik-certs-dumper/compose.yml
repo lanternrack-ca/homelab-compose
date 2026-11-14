@@ -1,0 +1,40 @@
+services:
+  certdumper:
+    image: ghcr.io/kereis/traefik-certs-dumper:latest
+    container_name: traefik-certs-dumper-certdumper
+    restart: unless-stopped
+    stop_grace_period: 2s
+    network_mode: none
+    volumes:
+      - ./traefik:/traefik:ro
+      - ./output:/output:rw
+      - ./hook/hook.sh:/hook/hook.sh:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    environment:
+      - ACME_FILE_PATH=/traefik/acme.json
+      - POST_HOOK_FILE_PATH=/hook/hook.sh
+      - COMBINE_PKCS12=yes
+      - PKCS12_PASSWORD=${PKCS12_PASSWORD:?set PKCS12_PASSWORD in .env}
+      - COMBINED_PEM=bundle.pem
+      - CONVERT_KEYS_TO_RSA=yes
+      - OVERRIDE_UID=1000
+      - OVERRIDE_GID=1000
+    healthcheck:
+      test: ["CMD", "/usr/bin/healthcheck"]
+      interval: 3s
+      timeout: 2s
+      retries: 5
+      start_period: 2s
+
+  tls-consumer:
+    image: nginx:alpine
+    container_name: traefik-certs-dumper-tls-consumer
+    restart: unless-stopped
+    depends_on:
+      certdumper:
+        condition: service_healthy
+    ports:
+      - "127.0.0.1:3000:443"
+    volumes:
+      - ./output:/certs:ro
+      - ./nginx-default.conf:/etc/nginx/conf.d/default.conf:ro
