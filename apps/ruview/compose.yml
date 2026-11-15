@@ -1,0 +1,34 @@
+services:
+  sensing-server:
+    image: ${IMG:-ruvnet/wifi-densepose:latest}
+    container_name: ruview-sensing-server
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:3000:3000"
+      - "127.0.0.1:3002:3001"
+      - "127.0.0.1:5005:5005/udp"
+    environment:
+      - RUST_LOG=info
+      - CSI_SOURCE=simulated
+      - RUVIEW_ALLOW_UNAUTHENTICATED=1
+      - RUVIEW_BIND_ADDR=0.0.0.0
+      - RUVIEW_UDP_INSECURE_LAN=true
+      - SENSING_ALLOWED_HOSTS=localhost,127.0.0.1
+      - MODELS_DIR=/app/models
+    volumes:
+      - ./data/models:/app/models
+      - ./data/recordings:/app/data/recordings
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    deploy:
+      resources:
+        limits:
+          cpus: "2.0"
+          memory: 1G
+    healthcheck:
+      test: ["CMD-SHELL", "kill -0 1"]
+      interval: 10s
+      timeout: 3s
+      retries: 3

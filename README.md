@@ -10,7 +10,7 @@ cp .env.example .env     # change every change-me value
 docker compose up -d
 ```
 
-## Apps (66)
+## Apps (67)
 
 | App | Tested version | Lab-tested | Guide |
 |---|---|---|---|
@@ -63,6 +63,7 @@ docker compose up -d
 | [qBittorrent](apps/qbittorrent/) | v5.3.0 | 2026-11-06 | [guide](https://lanternrack.ca/guides/qbittorrent/) |
 | [Radarr](apps/radarr/) | — | — | [guide](https://lanternrack.ca/guides/radarr/) |
 | [RdtClient](apps/rdt-client/) | 2.0.143.0 | 2026-11-08 | [guide](https://lanternrack.ca/guides/rdt-client/) |
+| [RuView](apps/ruview/) | 0.3.5 | 2026-11-15 | [guide](https://lanternrack.ca/guides/ruview/) |
 | [sablier](apps/sablier/) | — | — | [guide](https://lanternrack.ca/guides/sablier/) |
 | [Seerr](apps/seerr/) | v3.5.1 | 2026-11-06 | [guide](https://lanternrack.ca/guides/seerr/) |
 | [Sherlock](apps/sherlock/) | 0.16.0 | 2026-11-14 | [guide](https://lanternrack.ca/guides/sherlock/) |
