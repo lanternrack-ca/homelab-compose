@@ -10,11 +10,12 @@ cp .env.example .env     # change every change-me value
 docker compose up -d
 ```
 
-## Apps (69)
+## Apps (70)
 
 | App | Tested version | Lab-tested | Guide |
 |---|---|---|---|
 | [Adminer](apps/adminer/) | — | — | [guide](https://lanternrack.ca/guides/adminer/) |
+| [age](apps/age/) | 1.3.2 | 2026-11-15 | [guide](https://lanternrack.ca/guides/age/) |
 | [and Play Termcraft](apps/termcraft/) | — | — | [guide](https://lanternrack.ca/guides/termcraft/) |
 | [and Run Corgi](apps/corgi/) | — | — | [guide](https://lanternrack.ca/guides/corgi/) |
 | [and Run ThinkRail](apps/thinkrail/) | — | — | [guide](https://lanternrack.ca/guides/thinkrail/) |

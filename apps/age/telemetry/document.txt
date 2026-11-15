@@ -1,0 +1,3 @@
+CONFIDENTIAL PAYLOAD: Verified modern cryptography with age encryption suite.
+STREAM CIPHER: ChaCha20-Poly1305 authenticated encryption
+RECIPIENTS: Classical Curve25519 & Post-Quantum ML-KEM-768

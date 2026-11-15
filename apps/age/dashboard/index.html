@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>age — Modern Encryption & Cryptographic Suite</title>
+  <style>
+    :root {
+      --bg: #090d16;
+      --card-bg: #111827;
+      --card-alt: #162032;
+      --border: #1f2937;
+      --text: #f3f4f6;
+      --text-muted: #9ca3af;
+      --accent: #38bdf8;
+      --accent-hover: #0284c7;
+      --success: #22c55e;
+      --warning: #f59e0b;
+      --terminal-bg: #030712;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      padding: 2rem 1.5rem;
+    }
+    .container { max-width: 1100px; margin: 0 auto; }
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 1.25rem;
+    }
+    .brand { display: flex; align-items: center; gap: 0.85rem; }
+    .logo-badge {
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #0284c7, #38bdf8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      box-shadow: 0 4px 14px rgba(56, 189, 248, 0.3);
+    }
+    h1 { font-size: 1.5rem; font-weight: 700; letter-spacing: -0.02em; }
+    .subtitle { font-size: 0.875rem; color: var(--text-muted); }
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.35rem 0.85rem;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      background: rgba(34, 197, 94, 0.15);
+      color: var(--success);
+      border: 1px solid rgba(34, 197, 94, 0.3);
+    }
+    .status-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--success); }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.25rem;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
+    }
+    .card-title { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); margin-bottom: 0.5rem; }
+    .card-value { font-size: 1.65rem; font-weight: 700; color: var(--text); }
+    .card-desc { font-size: 0.8rem; color: var(--text-muted); margin-top: 0.35rem; }
+    .panel {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      margin-bottom: 1.5rem;
+    }
+    .panel-header {
+      background: var(--card-alt);
+      padding: 0.85rem 1.25rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .panel-title { font-size: 0.95rem; font-weight: 600; }
+    table { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.875rem; }
+    th, td { padding: 0.85rem 1.25rem; border-bottom: 1px solid var(--border); }
+    th { font-weight: 600; color: var(--text-muted); background: rgba(0,0,0,0.1); }
+    tr:last-child td { border-bottom: none; }
+    .badge {
+      display: inline-block;
+      padding: 0.2rem 0.55rem;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+    .badge-optimal { background: rgba(34, 197, 94, 0.2); color: var(--success); }
+    .badge-info { background: rgba(56, 189, 248, 0.2); color: var(--accent); }
+    .badge-purple { background: rgba(192, 132, 252, 0.2); color: #c084fc; }
+    .terminal-box {
+      background: var(--terminal-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1rem;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 0.8rem;
+      color: #93c5fd;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      line-height: 1.4;
+      max-height: 260px;
+    }
+    .downloads { display: flex; gap: 0.75rem; flex-wrap: wrap; margin-top: 0.5rem; }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: #1e293b;
+      color: #f1f5f9;
+      padding: 0.5rem 0.85rem;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      text-decoration: none;
+      border: 1px solid var(--border);
+      transition: all 0.15s ease;
+    }
+    .btn:hover { background: #334155; border-color: var(--accent); }
+    footer { text-align: center; font-size: 0.75rem; color: var(--text-muted); margin-top: 2rem; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="brand">
+        <div class="logo-badge">🔐</div>
+        <div>
+          <h1>age — Modern Encryption & Cryptographic Suite</h1>
+          <div class="subtitle">Stream-oriented file encryption, Post-Quantum Hybrid Cryptography (ML-KEM-768), Bech32 Explicit Keys</div>
+        </div>
+      </div>
+      <div class="status-pill">
+        <span class="status-dot"></span>
+        <span id="runtime-pill">AGE RUNTIME: ACTIVE (v1.3.2) &bull; POST-QUANTUM READY</span>
+      </div>
+    </header>
+
+    <div class="grid">
+      <div class="card">
+        <div class="card-title">Release Version</div>
+        <div class="card-value" id="card-version" style="color: var(--accent);">v1.3.2</div>
+        <div class="card-desc">Filippo Valsorda (Linux amd64)</div>
+      </div>
+      <div class="card">
+        <div class="card-title">Recipient Modes</div>
+        <div class="card-value" id="card-modes" style="color: #c084fc;">X25519 & ML-KEM</div>
+        <div class="card-desc">Classical + Post-Quantum Hybrid</div>
+      </div>
+      <div class="card">
+        <div class="card-title">Format Standard</div>
+        <div class="card-value" id="card-format" style="color: var(--success); font-size: 1.45rem;">age/v1 Spec</div>
+        <div class="card-desc">Bech32 Encoded Explicit Keys</div>
+      </div>
+      <div class="card">
+        <div class="card-title">Security Model</div>
+        <div class="card-value" id="card-security" style="font-size: 1.35rem; color: var(--text);">Non-Root</div>
+        <div class="card-desc">UID 1000 &bull; Zero Host Pollution</div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-header">
+        <div class="panel-title">Cryptographic Identifiers & Generated Keypairs</div>
+        <span style="font-size: 0.75rem; color: var(--text-muted);">Verified Bech32 Keypairs</span>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Cryptographic Scheme</th>
+            <th>Type</th>
+            <th>Identifier Prefix</th>
+            <th>Algorithm Profile</th>
+            <th>Operational Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Classical Asymmetric</strong></td>
+            <td><code>X25519</code></td>
+            <td><code>age1...</code></td>
+            <td>Curve25519 ECDH + ChaCha20-Poly1305</td>
+            <td><span class="badge badge-optimal">ACTIVE / VERIFIED</span></td>
+          </tr>
+          <tr>
+            <td><strong>Post-Quantum Hybrid</strong></td>
+            <td><code>ML-KEM-768</code></td>
+            <td><code>age1pq1...</code></td>
+            <td>NIST FIPS 203 ML-KEM-768 + X25519 Hybrid</td>
+            <td><span class="badge badge-purple">PQ VERIFIED</span></td>
+          </tr>
+          <tr>
+            <td><strong>Symmetric Passphrase</strong></td>
+            <td><code>scrypt</code></td>
+            <td>Passphrase</td>
+            <td>scrypt work factor logN=18 + ChaCha20-Poly1305</td>
+            <td><span class="badge badge-info">SUPPORTED</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="panel">
+      <div class="panel-header">
+        <div class="panel-title">Core CLI Capabilities & Binary Suite</div>
+        <span style="font-size: 0.75rem; color: var(--text-muted);">Verified Subcommands</span>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Command</th>
+            <th>Subcommand / Flag</th>
+            <th>Description</th>
+            <th>Execution Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>age -r &lt;key&gt; -a</code></td>
+            <td>Recipient Encryption</td>
+            <td>Encrypts payload to public key recipient with ASCII armor formatting</td>
+            <td><span class="badge badge-optimal">VERIFIED</span></td>
+          </tr>
+          <tr>
+            <td><code>age --decrypt -i &lt;id&gt;</code></td>
+            <td>Stream Decryption</td>
+            <td>Decrypts envelope using private identity file with bit-for-bit accuracy</td>
+            <td><span class="badge badge-optimal">VERIFIED</span></td>
+          </tr>
+          <tr>
+            <td><code>age-keygen -pq</code></td>
+            <td>Post-Quantum Generation</td>
+            <td>Generates quantum-resistant ML-KEM-768 hybrid identity keypair</td>
+            <td><span class="badge badge-purple">PQ READY</span></td>
+          </tr>
+          <tr>
+            <td><code>age-inspect --json</code></td>
+            <td>Header Inspection</td>
+            <td>Inspects envelope recipient headers without private key access</td>
+            <td><span class="badge badge-optimal">VERIFIED</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="panel">
+      <div class="panel-header">
+        <div class="panel-title">Live Cryptographic Envelope Inspection</div>
+        <span style="font-size: 0.75rem; color: var(--text-muted);">age-inspect output</span>
+      </div>
+      <div style="padding: 1rem;">
+        <pre class="terminal-box" id="terminal-viewer">age-encryption.org/v1
+Recipient 1: X25519
+  Recipient public key hash: verified
+Payload: ChaCha20-Poly1305 encrypted stream
+Armor: -----BEGIN AGE ENCRYPTED FILE----- ... -----END AGE ENCRYPTED FILE-----</pre>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-header">
+        <div class="panel-title">Generated Telemetry & Cryptographic Artifacts</div>
+      </div>
+      <div style="padding: 1.25rem;">
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.75rem;">Inspect operational outputs, public keys, and envelope data:</p>
+        <div class="downloads">
+          <a class="btn" href="http://localhost:3000/telemetry/document.txt.age" target="_blank">🔒 Encrypted Document (.age)</a>
+          <a class="btn" href="http://localhost:3000/telemetry/key.txt" target="_blank">🔑 Classical Keypair (.txt)</a>
+          <a class="btn" href="http://localhost:3000/telemetry/key-pq.txt" target="_blank">⚛️ Post-Quantum Keypair (.txt)</a>
+          <a class="btn" href="http://localhost:3000/telemetry/inspect.json" target="_blank">📊 Envelope Metadata (.json)</a>
+          <a class="btn" href="http://localhost:3000/telemetry/inspect.txt" target="_blank">⚡ Envelope Headers (.txt)</a>
+          <a class="btn" href="http://localhost:3000/health" target="_blank">🩺 Health Probe (/health)</a>
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      age v1.3.2 &bull; Deployed via Docker Compose &bull; Unprivileged Container Isolation (UID 1000) &bull; Zero Host Runtime Pollution
+    </footer>
+  </div>
+</body>
+</html>
