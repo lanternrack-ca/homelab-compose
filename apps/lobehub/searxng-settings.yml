@@ -1,0 +1,5 @@
+use_default_settings: true
+server:
+  secret_key: "lobehub-searxng-secret-token"
+  limiter: false
+  image_proxy: true

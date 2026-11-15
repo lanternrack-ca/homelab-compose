@@ -10,7 +10,7 @@ cp .env.example .env     # change every change-me value
 docker compose up -d
 ```
 
-## Apps (62)
+## Apps (63)
 
 | App | Tested version | Lab-tested | Guide |
 |---|---|---|---|
@@ -47,6 +47,7 @@ docker compose up -d
 | [LightPost, a One-Dashboard Social Media Scheduler,](apps/lightpost/) | — | — | [guide](https://lanternrack.ca/guides/lightpost/) |
 | [Linkwarden](apps/linkwarden/) | v2.17.0 | 2026-11-11 | [guide](https://lanternrack.ca/guides/linkwarden/) |
 | [Listenarr](apps/listenarr/) | — | — | [guide](https://lanternrack.ca/guides/listenarr/) |
+| [LobeHub](apps/lobehub/) | 2.3.3 | 2026-11-14 | [guide](https://lanternrack.ca/guides/lobehub/) |
 | [Mealie](apps/mealie/) | — | — | [guide](https://lanternrack.ca/guides/mealie/) |
 | [Narratarr](apps/narratarr/) | 0.9.4 | 2026-11-08 | [guide](https://lanternrack.ca/guides/narratarr/) |
 | [Navidrome](apps/navidrome/) | — | — | [guide](https://lanternrack.ca/guides/navidrome/) |

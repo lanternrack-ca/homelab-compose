@@ -1,0 +1,157 @@
+name: lobehub
+
+services:
+  lobe:
+    image: lobehub/lobehub:2.3.3
+    container_name: lobehub-app
+    ports:
+      - '${LOBE_PORT}:3210'
+    depends_on:
+      postgresql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      rustfs:
+        condition: service_healthy
+      rustfs-init:
+        condition: service_completed_successfully
+    environment:
+      - 'KEY_VAULTS_SECRET=${KEY_VAULTS_SECRET}'
+      - 'AUTH_SECRET=${AUTH_SECRET}'
+      - 'DATABASE_URL=postgresql://postgres:${POSTGRES_PASSWORD}@postgresql:5432/${LOBE_DB_NAME}'
+      - 'INTERNAL_APP_URL=http://localhost:3210'
+      - 'S3_ENDPOINT=${S3_ENDPOINT}'
+      - 'S3_INTERNAL_ENDPOINT=http://rustfs:9000'
+      - 'S3_BUCKET=${RUSTFS_LOBE_BUCKET}'
+      - 'S3_ENABLE_PATH_STYLE=1'
+      - 'S3_ACCESS_KEY=${RUSTFS_ACCESS_KEY}'
+      - 'S3_ACCESS_KEY_ID=${RUSTFS_ACCESS_KEY}'
+      - 'S3_SECRET_ACCESS_KEY=${RUSTFS_SECRET_KEY}'
+      - 'LLM_VISION_IMAGE_USE_BASE64=1'
+      - 'S3_SET_ACL=0'
+      - 'SEARXNG_URL=http://searxng:8080'
+      - 'REDIS_URL=redis://redis:6379'
+      - 'REDIS_PREFIX=lobechat'
+      - 'REDIS_TLS=0'
+      - 'ENABLE_AGENT_GATEWAY=1'
+      - 'AGENT_GATEWAY_INTERNAL_URL=http://gateway:8787'
+      - 'AGENT_GATEWAY_SERVICE_TOKEN=${GATEWAY_SERVICE_TOKEN}'
+      - 'DEVICE_GATEWAY_SERVICE_TOKEN=${GATEWAY_SERVICE_TOKEN}'
+    env_file:
+      - .env
+    restart: unless-stopped
+    networks:
+      - lobe-network
+
+  gateway:
+    image: ghcr.io/lobehub/lobehub-gateway:0.5.0
+    container_name: lobehub-gateway
+    ports:
+      - '${AGENT_GATEWAY_PORT}:8787'
+      - '${DEVICE_GATEWAY_PORT}:8788'
+    environment:
+      - 'SERVICE_TOKEN=${GATEWAY_SERVICE_TOKEN}'
+      - 'JWKS_PUBLIC_KEY=${JWKS_PUBLIC_KEY}'
+      - 'LOBE_API_BASE_URL=http://lobe:3210'
+    restart: unless-stopped
+    networks:
+      - lobe-network
+
+  postgresql:
+    image: paradedb/paradedb:latest-pg17
+    container_name: lobehub-postgres
+    expose:
+      - '5432'
+    volumes:
+      - './data:/var/lib/postgresql/data'
+    command: ['postgres', '-c', 'shared_preload_libraries=pg_search,pg_cron,pg_stat_statements']
+    environment:
+      - 'POSTGRES_DB=${LOBE_DB_NAME}'
+      - 'POSTGRES_PASSWORD=${POSTGRES_PASSWORD}'
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U postgres -h 127.0.0.1']
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 60s
+    restart: unless-stopped
+    networks:
+      - lobe-network
+
+  redis:
+    image: redis:7-alpine
+    container_name: lobehub-redis
+    expose:
+      - '6379'
+    command: redis-server --save 60 1000 --appendonly yes
+    volumes:
+      - 'redis_data:/data'
+    healthcheck:
+      test: ['CMD', 'redis-cli', 'ping']
+      interval: 5s
+      timeout: 3s
+      retries: 5
+    restart: unless-stopped
+    networks:
+      - lobe-network
+
+  rustfs:
+    image: rustfs/rustfs:latest
+    container_name: lobehub-rustfs
+    ports:
+      - '${RUSTFS_PORT}:9000'
+      - '${RUSTFS_ADMIN_PORT}:9001'
+    environment:
+      - RUSTFS_CONSOLE_ENABLE=true
+      - RUSTFS_ACCESS_KEY=${RUSTFS_ACCESS_KEY}
+      - RUSTFS_SECRET_KEY=${RUSTFS_SECRET_KEY}
+    volumes:
+      - 'rustfs_data:/data'
+    healthcheck:
+      test: ['CMD-SHELL', 'wget -qO- http://localhost:9000/health >/dev/null 2>&1 || exit 1']
+      interval: 5s
+      timeout: 3s
+      retries: 30
+    command:
+      ['--access-key', '${RUSTFS_ACCESS_KEY}', '--secret-key', '${RUSTFS_SECRET_KEY}', '/data']
+    networks:
+      - lobe-network
+
+  rustfs-init:
+    image: rustfs/rc:latest
+    container_name: lobehub-rustfs-init
+    depends_on:
+      rustfs:
+        condition: service_healthy
+    volumes:
+      - ./bucket.config.json:/bucket.config.json:ro
+    entrypoint: /bin/sh
+    command: -c '
+      set -eux;
+      rc alias set rustfs "http://rustfs:9000" "${RUSTFS_ACCESS_KEY}" "${RUSTFS_SECRET_KEY}";
+      rc mb "rustfs/lobe" --ignore-existing;
+      rc anonymous set-json "/bucket.config.json" "rustfs/lobe";
+      printf "%s" "<CORSConfiguration><CORSRule><AllowedOrigin>*</AllowedOrigin><AllowedMethod>GET</AllowedMethod><AllowedMethod>PUT</AllowedMethod><AllowedMethod>HEAD</AllowedMethod><AllowedHeader>*</AllowedHeader><ExposeHeader>ETag</ExposeHeader><MaxAgeSeconds>3600</MaxAgeSeconds></CORSRule></CORSConfiguration>" | rc bucket cors set "rustfs/lobe" -;
+      '
+    restart: 'no'
+    networks:
+      - lobe-network
+
+  searxng:
+    image: searxng/searxng
+    container_name: lobehub-searxng
+    volumes:
+      - './searxng-settings.yml:/etc/searxng/settings.yml'
+    environment:
+      - 'SEARXNG_SETTINGS_FILE=/etc/searxng/settings.yml'
+    restart: unless-stopped
+    networks:
+      - lobe-network
+
+volumes:
+  redis_data:
+  rustfs_data:
+
+networks:
+  lobe-network:
+    driver: bridge
