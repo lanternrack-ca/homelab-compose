@@ -10,7 +10,7 @@ cp .env.example .env     # change every change-me value
 docker compose up -d
 ```
 
-## Apps (68)
+## Apps (69)
 
 | App | Tested version | Lab-tested | Guide |
 |---|---|---|---|
@@ -38,6 +38,7 @@ docker compose up -d
 | [Grafana](apps/grafana/) | 13.3.0 | 2026-11-08 | [guide](https://lanternrack.ca/guides/grafana/) |
 | [Grimoire](apps/grimoire/) | — | — | [guide](https://lanternrack.ca/guides/grimoire/) |
 | [Heimdall](apps/heimdall/) | v2.8.4-ls372 | 2026-11-11 | [guide](https://lanternrack.ca/guides/heimdall/) |
+| [herdr](apps/herdr/) | 0.9.5 | 2026-11-15 | [guide](https://lanternrack.ca/guides/herdr/) |
 | [Hob, the Open-Source Local AI Desktop App, in a Throwaway Docker Container](apps/hob/) | — | — | [guide](https://lanternrack.ca/guides/hob/) |
 | [Homarr](apps/homarr/) | — | — | [guide](https://lanternrack.ca/guides/homarr/) |
 | [Homelab Atlas](apps/homelab-atlas/) | — | — | [guide](https://lanternrack.ca/guides/homelab-atlas/) |

@@ -1,0 +1,5 @@
+[
+  {"name": "claude-code", "pane": "w1:p1", "status": "working", "task": "refactoring auth middleware"},
+  {"name": "codex", "pane": "w1:p2", "status": "blocked", "task": "awaiting user approval for shell execution"},
+  {"name": "opencode", "pane": "w2:p1", "status": "idle", "task": "test suite completed successfully"}
+]
