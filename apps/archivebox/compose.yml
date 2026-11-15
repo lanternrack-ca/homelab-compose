@@ -1,0 +1,32 @@
+services:
+  archivebox:
+    image: archivebox/archivebox:latest
+    container_name: archivebox-web
+    restart: unless-stopped
+    ports:
+      - "${HOST_PORT:-3000}:5797"
+    volumes:
+      - ./data:/data
+      - tmp:/tmp/archivebox
+    environment:
+      - ADMIN_USERNAME=${ADMIN_USERNAME:-admin}
+      - ADMIN_PASSWORD=${ADMIN_PASSWORD:?set ADMIN_PASSWORD in .env}
+      - BASE_URL=http://localhost:${HOST_PORT:-3000}
+      - SERVER_SECURITY_MODE=auto
+      - PUBLIC_ADD_VIEW=True
+      - ARCHIVEDOTORG_ENABLED=False
+      - PUID=1000
+      - PGID=1000
+    shm_size: 1gb
+    pids_limit: 2048
+    ulimits:
+      nofile: 8192
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fs http://127.0.0.1:5797/health/ || exit 1"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 15s
+
+volumes:
+  tmp:

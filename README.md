@@ -10,7 +10,7 @@ cp .env.example .env     # change every change-me value
 docker compose up -d
 ```
 
-## Apps (74)
+## Apps (75)
 
 | App | Tested version | Lab-tested | Guide |
 |---|---|---|---|
@@ -21,6 +21,7 @@ docker compose up -d
 | [and Run ThinkRail](apps/thinkrail/) | — | — | [guide](https://lanternrack.ca/guides/thinkrail/) |
 | [and Use Farol](apps/farol/) | — | — | [guide](https://lanternrack.ca/guides/farol/) |
 | [and Use proc](apps/proc-cli/) | — | — | [guide](https://lanternrack.ca/guides/proc-cli/) |
+| [ArchiveBox](apps/archivebox/) | 0.9.77 | 2026-11-15 | [guide](https://lanternrack.ca/guides/archivebox/) |
 | [Attic](apps/attic/) | — | — | [guide](https://lanternrack.ca/guides/attic/) |
 | [Audiobookshelf](apps/audiobookshelf/) | — | — | [guide](https://lanternrack.ca/guides/audiobookshelf/) |
 | [Authentik](apps/authentik/) | 2026.8.5 | 2026-11-06 | [guide](https://lanternrack.ca/guides/authentik/) |
