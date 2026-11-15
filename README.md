@@ -10,7 +10,7 @@ cp .env.example .env     # change every change-me value
 docker compose up -d
 ```
 
-## Apps (60)
+## Apps (61)
 
 | App | Tested version | Lab-tested | Guide |
 |---|---|---|---|
@@ -74,6 +74,7 @@ docker compose up -d
 | [TREK](apps/trek/) | — | — | [guide](https://lanternrack.ca/guides/trek/) |
 | [Umami](apps/umami/) | — | — | [guide](https://lanternrack.ca/guides/umami/) |
 | [Vaultwarden](apps/vaultwarden/) | — | — | [guide](https://lanternrack.ca/guides/vaultwarden/) |
+| [Zed's Multiplayer Collaboration Backend](apps/zed/) | 1.30.0 | 2026-11-14 | [guide](https://lanternrack.ca/guides/zed/) |
 
 ## Stacks
 
