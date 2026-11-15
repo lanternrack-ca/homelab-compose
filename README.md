@@ -10,7 +10,7 @@ cp .env.example .env     # change every change-me value
 docker compose up -d
 ```
 
-## Apps (64)
+## Apps (65)
 
 | App | Tested version | Lab-tested | Guide |
 |---|---|---|---|
@@ -64,6 +64,7 @@ docker compose up -d
 | [RdtClient](apps/rdt-client/) | 2.0.143.0 | 2026-11-08 | [guide](https://lanternrack.ca/guides/rdt-client/) |
 | [sablier](apps/sablier/) | — | — | [guide](https://lanternrack.ca/guides/sablier/) |
 | [Seerr](apps/seerr/) | v3.5.1 | 2026-11-06 | [guide](https://lanternrack.ca/guides/seerr/) |
+| [Sherlock](apps/sherlock/) | 0.16.0 | 2026-11-14 | [guide](https://lanternrack.ca/guides/sherlock/) |
 | [Sonarr](apps/sonarr/) | — | — | [guide](https://lanternrack.ca/guides/sonarr/) |
 | [SparkyFitness](apps/sparkyfitness/) | — | — | [guide](https://lanternrack.ca/guides/sparkyfitness/) |
 | [Speedtest Tracker](apps/speedtest-tracker/) | v1.15.1-ls180 | 2026-11-08 | [guide](https://lanternrack.ca/guides/speedtest-tracker/) |

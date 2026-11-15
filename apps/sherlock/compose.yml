@@ -1,0 +1,25 @@
+services:
+  web:
+    image: nginx:alpine
+    container_name: sherlock-web
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:${HOST_PORT:-3000}:80"
+    volumes:
+      - ./dashboard:/usr/share/nginx/html:ro
+      - ./results:/var/www/results:ro
+      - ./nginx-default.conf:/etc/nginx/conf.d/default.conf:ro
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q -O - http://127.0.0.1/health || exit 1"]
+      interval: 3s
+      timeout: 2s
+      retries: 5
+      start_period: 2s
+
+  sherlock:
+    image: sherlock/sherlock:latest
+    container_name: sherlock-cli
+    volumes:
+      - ./results:/opt/sherlock/results
+    working_dir: /opt/sherlock/results
+    command: ["--version"]
