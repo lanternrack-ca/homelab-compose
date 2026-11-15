@@ -1,0 +1,20 @@
+services:
+  agent-browser:
+    image: agent-browser:latest
+    container_name: agent-browser-app
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:${HOST_PORT:-3000}:4848"
+    volumes:
+      - ~/agent-browser/repo:/workspace:rw
+    shm_size: '2gb'
+    ipc: host
+    environment:
+      - AGENT_BROWSER_HEADLESS=1
+      - NODE_ENV=production
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://127.0.0.1:4849/ || exit 1"]
+      interval: 3s
+      timeout: 2s
+      retries: 5
+      start_period: 2s

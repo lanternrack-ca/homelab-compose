@@ -10,7 +10,7 @@ cp .env.example .env     # change every change-me value
 docker compose up -d
 ```
 
-## Apps (72)
+## Apps (73)
 
 | App | Tested version | Lab-tested | Guide |
 |---|---|---|---|
@@ -85,6 +85,7 @@ docker compose up -d
 | [Umami](apps/umami/) | — | — | [guide](https://lanternrack.ca/guides/umami/) |
 | [Uptime Kuma](apps/uptime-kuma/) | 2.5.11 | 2026-11-14 | [guide](https://lanternrack.ca/guides/uptime-kuma/) |
 | [Vaultwarden](apps/vaultwarden/) | — | — | [guide](https://lanternrack.ca/guides/vaultwarden/) |
+| [Vercel's agent-browser and Observability Dashboard](apps/agent-browser/) | 0.43.0 | 2026-11-15 | [guide](https://lanternrack.ca/guides/agent-browser/) |
 | [Zed's Multiplayer Collaboration Backend](apps/zed/) | 1.30.0 | 2026-11-14 | [guide](https://lanternrack.ca/guides/zed/) |
 
 ## Stacks
