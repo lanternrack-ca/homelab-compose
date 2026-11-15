@@ -10,7 +10,7 @@ cp .env.example .env     # change every change-me value
 docker compose up -d
 ```
 
-## Apps (70)
+## Apps (71)
 
 | App | Tested version | Lab-tested | Guide |
 |---|---|---|---|
@@ -74,6 +74,7 @@ docker compose up -d
 | [SparkyFitness](apps/sparkyfitness/) | — | — | [guide](https://lanternrack.ca/guides/sparkyfitness/) |
 | [Speedtest Tracker](apps/speedtest-tracker/) | v1.15.1-ls180 | 2026-11-08 | [guide](https://lanternrack.ca/guides/speedtest-tracker/) |
 | [Syncthing](apps/syncthing/) | — | — | [guide](https://lanternrack.ca/guides/syncthing/) |
+| [T3 Code, the Open-Source Agent Control Plane,](apps/t3code/) | 0.1.9 | 2026-11-15 | [guide](https://lanternrack.ca/guides/t3code/) |
 | [Tautulli](apps/tautulli/) | — | — | [guide](https://lanternrack.ca/guides/tautulli/) |
 | [Tinyauth](apps/tinyauth/) | — | — | [guide](https://lanternrack.ca/guides/tinyauth/) |
 | [Tracearr](apps/tracearr/) | v3.1.3 | 2026-11-02 | [guide](https://lanternrack.ca/guides/tracearr/) |
