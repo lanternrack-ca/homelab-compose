@@ -10,7 +10,7 @@ cp .env.example .env     # change every change-me value
 docker compose up -d
 ```
 
-## Apps (67)
+## Apps (68)
 
 | App | Tested version | Lab-tested | Guide |
 |---|---|---|---|
@@ -51,6 +51,7 @@ docker compose up -d
 | [Listenarr](apps/listenarr/) | — | — | [guide](https://lanternrack.ca/guides/listenarr/) |
 | [LobeHub](apps/lobehub/) | 2.3.3 | 2026-11-14 | [guide](https://lanternrack.ca/guides/lobehub/) |
 | [Mealie](apps/mealie/) | — | — | [guide](https://lanternrack.ca/guides/mealie/) |
+| [Mole](apps/mole/) | 0.6.0 | 2026-11-15 | [guide](https://lanternrack.ca/guides/mole/) |
 | [Narratarr](apps/narratarr/) | 0.9.4 | 2026-11-08 | [guide](https://lanternrack.ca/guides/narratarr/) |
 | [Navidrome](apps/navidrome/) | — | — | [guide](https://lanternrack.ca/guides/navidrome/) |
 | [Norish, a Self-Hosted Recipe Manager,](apps/norish/) | — | — | [guide](https://lanternrack.ca/guides/norish/) |

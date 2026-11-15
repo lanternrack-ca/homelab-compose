@@ -1,0 +1,28 @@
+services:
+  web:
+    image: nginx:alpine
+    container_name: mole-web
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:${HOST_PORT:-3000}:80"
+    volumes:
+      - ./dashboard:/usr/share/nginx/html:ro
+      - ./telemetry:/var/www/telemetry:ro
+      - ./nginx-default.conf:/etc/nginx/conf.d/default.conf:ro
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q -O - http://127.0.0.1/health || exit 1"]
+      interval: 3s
+      timeout: 2s
+      retries: 5
+      start_period: 2s
+
+  mole:
+    image: mole:latest
+    container_name: mole-cli
+    volumes:
+      - ./telemetry:/telemetry
+      - ./config:/home/moleuser/.config/mole
+      - ./logs:/home/moleuser/.local/share/mole/logs
+    environment:
+      - TERM=xterm-256color
+    restart: "no"
