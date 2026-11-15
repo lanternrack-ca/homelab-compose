@@ -10,7 +10,7 @@ cp .env.example .env     # change every change-me value
 docker compose up -d
 ```
 
-## Apps (63)
+## Apps (64)
 
 | App | Tested version | Lab-tested | Guide |
 |---|---|---|---|
@@ -26,6 +26,7 @@ docker compose up -d
 | [Bazarr](apps/bazarr/) | v1.6.2-ls371 | 2026-11-06 | [guide](https://lanternrack.ca/guides/bazarr/) |
 | [Chatto](apps/chatto/) | — | — | [guide](https://lanternrack.ca/guides/chatto/) |
 | [Cinephage](apps/cinephage/) | — | — | [guide](https://lanternrack.ca/guides/cinephage/) |
+| [Claude-Mem](apps/claude-mem/) | 15.18.3 | 2026-11-14 | [guide](https://lanternrack.ca/guides/claude-mem/) |
 | [copyparty](apps/copyparty/) | v1.20.26 | 2026-11-11 | [guide](https://lanternrack.ca/guides/copyparty/) |
 | [Dispatcharr](apps/dispatcharr/) | — | — | [guide](https://lanternrack.ca/guides/dispatcharr/) |
 | [docker-socket-proxy](apps/docker-socket-proxy/) | 3.4.7-r0-ls105 | 2026-11-14 | [guide](https://lanternrack.ca/guides/docker-socket-proxy/) |

@@ -1,0 +1,133 @@
+services:
+  postgres:
+    image: claude-mem-postgres:17
+    build:
+      context: ~/claude-mem/repo/docker/postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:?POSTGRES_USER is required}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is required}
+      POSTGRES_DB: ${POSTGRES_DB:?POSTGRES_DB is required}
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U \"$POSTGRES_USER\" -d \"$POSTGRES_DB\""]
+      interval: 5s
+      timeout: 3s
+      retries: 12
+      start_period: 5s
+
+  postgres-collation:
+    image: claude-mem-postgres:17
+    pull_policy: never
+    command: ["reindex-collation"]
+    restart: "no"
+    environment:
+      PGHOST: postgres
+      POSTGRES_USER: ${POSTGRES_USER:?POSTGRES_USER is required}
+      PGPASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is required}
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  valkey:
+    image: valkey/valkey:8-alpine
+    restart: unless-stopped
+    command:
+      - valkey-server
+      - --appendonly
+      - "yes"
+      - --appendfsync
+      - everysec
+      - --maxmemory-policy
+      - noeviction
+    volumes:
+      - valkey-data:/data
+    healthcheck:
+      test: ["CMD", "valkey-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 12
+
+  claude-mem-server:
+    image: claude-mem:latest
+    build:
+      context: ~/claude-mem/repo
+      dockerfile: docker/claude-mem/Dockerfile
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+      postgres-collation:
+        condition: service_completed_successfully
+      valkey:
+        condition: service_healthy
+    environment:
+      CLAUDE_MEM_CONTAINER_MODE: server
+      CLAUDE_MEM_DOCKER: "1"
+      CLAUDE_MEM_RUNTIME: server-beta
+      CLAUDE_MEM_HOST: 0.0.0.0
+      CLAUDE_MEM_SERVER_HOST: 0.0.0.0
+      CLAUDE_MEM_SERVER_PORT: "37877"
+      CLAUDE_MEM_WORKER_HOST: 0.0.0.0
+      CLAUDE_MEM_WORKER_PORT: "37877"
+      CLAUDE_MEM_DATA_DIR: /data/claude-mem
+      CLAUDE_MEM_QUEUE_ENGINE: bullmq
+      CLAUDE_MEM_QUEUE_REDIS_PREFIX: ${CLAUDE_MEM_QUEUE_REDIS_PREFIX:-claude_mem_37877}
+      CLAUDE_MEM_REDIS_URL: ${CLAUDE_MEM_REDIS_URL:-redis://valkey:6379}
+      CLAUDE_MEM_REDIS_MODE: docker
+      CLAUDE_MEM_SERVER_DATABASE_URL: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
+      CLAUDE_MEM_AUTH_MODE: api-key
+      CLAUDE_MEM_CHROMA_ENABLED: "false"
+      CLAUDE_MEM_GENERATION_DISABLED: "true"
+      CLAUDE_MEM_SERVER_VECTOR_SEARCH: ${CLAUDE_MEM_SERVER_VECTOR_SEARCH:-auto}
+      CLAUDE_MEM_EMBEDDING_MODEL: ${CLAUDE_MEM_EMBEDDING_MODEL:-all-MiniLM-L6-v2}
+    ports:
+      - "${HOST_PORT}:37877"
+    volumes:
+      - claude-mem-data:/data/claude-mem
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://127.0.0.1:37877/healthz"]
+      interval: 5s
+      timeout: 3s
+      retries: 12
+      start_period: 10s
+
+  claude-mem-worker:
+    image: claude-mem:latest
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+      postgres-collation:
+        condition: service_completed_successfully
+      valkey:
+        condition: service_healthy
+      claude-mem-server:
+        condition: service_healthy
+    environment:
+      CLAUDE_MEM_CONTAINER_MODE: worker
+      CLAUDE_MEM_DOCKER: "1"
+      CLAUDE_MEM_RUNTIME: server-beta
+      CLAUDE_MEM_DATA_DIR: /data/claude-mem
+      CLAUDE_MEM_QUEUE_ENGINE: bullmq
+      CLAUDE_MEM_QUEUE_REDIS_PREFIX: ${CLAUDE_MEM_QUEUE_REDIS_PREFIX:-claude_mem_37877}
+      CLAUDE_MEM_REDIS_URL: ${CLAUDE_MEM_REDIS_URL:-redis://valkey:6379}
+      CLAUDE_MEM_REDIS_MODE: docker
+      CLAUDE_MEM_SERVER_DATABASE_URL: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
+      CLAUDE_MEM_AUTH_MODE: api-key
+      CLAUDE_MEM_CHROMA_ENABLED: "false"
+      CLAUDE_MEM_SERVER_PROVIDER: ${CLAUDE_MEM_SERVER_PROVIDER:-claude}
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+      CLAUDE_MEM_ANTHROPIC_API_KEY: ${CLAUDE_MEM_ANTHROPIC_API_KEY:-}
+      GEMINI_API_KEY: ${GEMINI_API_KEY:-}
+      OPENROUTER_API_KEY: ${OPENROUTER_API_KEY:-}
+      CLAUDE_MEM_SERVER_VECTOR_SEARCH: ${CLAUDE_MEM_SERVER_VECTOR_SEARCH:-auto}
+      CLAUDE_MEM_EMBEDDING_MODEL: ${CLAUDE_MEM_EMBEDDING_MODEL:-all-MiniLM-L6-v2}
+    volumes:
+      - claude-mem-data:/data/claude-mem
+
+volumes:
+  claude-mem-data:
+  postgres-data:
+  valkey-data:
