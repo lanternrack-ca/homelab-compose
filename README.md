@@ -10,7 +10,7 @@ cp .env.example .env     # change every change-me value
 docker compose up -d
 ```
 
-## Apps (61)
+## Apps (62)
 
 | App | Tested version | Lab-tested | Guide |
 |---|---|---|---|
@@ -73,6 +73,7 @@ docker compose up -d
 | [traefik-certs-dumper](apps/traefik-certs-dumper/) | 1.8.32 | 2026-11-14 | [guide](https://lanternrack.ca/guides/traefik-certs-dumper/) |
 | [TREK](apps/trek/) | — | — | [guide](https://lanternrack.ca/guides/trek/) |
 | [Umami](apps/umami/) | — | — | [guide](https://lanternrack.ca/guides/umami/) |
+| [Uptime Kuma](apps/uptime-kuma/) | 2.5.11 | 2026-11-14 | [guide](https://lanternrack.ca/guides/uptime-kuma/) |
 | [Vaultwarden](apps/vaultwarden/) | — | — | [guide](https://lanternrack.ca/guides/vaultwarden/) |
 | [Zed's Multiplayer Collaboration Backend](apps/zed/) | 1.30.0 | 2026-11-14 | [guide](https://lanternrack.ca/guides/zed/) |
 
