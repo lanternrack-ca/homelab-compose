@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chrome DevTools for Agents — Inspection Viewer</title>
+  <style>
+    :root {
+      --bg: #0b0f19;
+      --card-bg: #111827;
+      --border: #1f2937;
+      --text: #f9fafb;
+      --text-muted: #9ca3af;
+      --accent: #38bdf8;
+      --success: #34d399;
+      --warning: #fbbf24;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      line-height: 1.5;
+      padding: 2rem 1rem;
+    }
+    .container { max-width: 960px; margin: 0 auto; }
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 1.5rem;
+    }
+    .brand { display: flex; align-items: center; gap: 1rem; }
+    .logo-badge {
+      background: linear-gradient(135deg, #2563eb, #38bdf8);
+      color: white;
+      width: 44px;
+      height: 44px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
+    h1 { font-size: 1.5rem; font-weight: 700; color: #fff; }
+    .subtitle { color: var(--text-muted); font-size: 0.875rem; }
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(52, 211, 153, 0.1);
+      border: 1px solid rgba(52, 211, 153, 0.3);
+      color: var(--success);
+      padding: 0.35rem 0.75rem;
+      border-radius: 9999px;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      background: var(--success);
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.25rem;
+    }
+    .card-label { font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted); font-weight: 600; margin-bottom: 0.35rem; }
+    .card-value { font-size: 1.15rem; font-weight: 700; color: #fff; }
+    .card-meta { font-size: 0.8rem; color: var(--accent); margin-top: 0.35rem; }
+    .panel {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+      margin-bottom: 1.5rem;
+    }
+    .panel-header {
+      padding: 1rem 1.25rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .panel-title { font-weight: 600; font-size: 0.95rem; }
+    .downloads { display: flex; gap: 0.75rem; margin-bottom: 1.25rem; flex-wrap: wrap; }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: #1e293b;
+      color: #fff;
+      border: 1px solid #334155;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      text-decoration: none;
+      font-weight: 500;
+      transition: all 0.15s ease;
+    }
+    .btn:hover { background: #334155; border-color: var(--accent); }
+    .btn-primary { background: #2563eb; border-color: #3b82f6; }
+    .btn-primary:hover { background: #1d4ed8; }
+    .preview-box {
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      overflow: hidden;
+      background: #000;
+    }
+    .preview-img { width: 100%; height: auto; display: block; max-height: 480px; object-fit: contain; }
+    .terminal {
+      background: #030712;
+      border: 1px solid #1f2937;
+      border-radius: 8px;
+      padding: 1.25rem;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 0.85rem;
+      color: #cbd5e1;
+      margin-bottom: 1.5rem;
+    }
+    .term-cyan { color: #38bdf8; }
+    .term-green { color: #4ade80; }
+    .term-yellow { color: #facc15; }
+    .code-box {
+      background: #020617;
+      border: 1px solid #1e293b;
+      border-radius: 6px;
+      padding: 1rem;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 0.8rem;
+      color: #94a3b8;
+      overflow-x: auto;
+    }
+    footer {
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      margin-top: 2rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="brand">
+        <div class="logo-badge">⚡</div>
+        <div>
+          <h1>Chrome DevTools for Agents</h1>
+          <div class="subtitle">Google Official MCP Server & CLI for Autonomous Browser Automation</div>
+        </div>
+      </div>
+      <div class="status-pill">
+        <span class="status-dot"></span>
+        Daemon: Active (v1.13.0)
+      </div>
+    </header>
+
+    <div class="grid">
+      <div class="card">
+        <div class="card-label">Protocol & Transport</div>
+        <div class="card-value">MCP stdio / JSON-RPC</div>
+        <div class="card-meta">30+ DevTools Tools Exposed</div>
+      </div>
+      <div class="card">
+        <div class="card-label">Browser Engine</div>
+        <div class="card-value">Chromium Headless</div>
+        <div class="card-meta">Isolated node (UID 1000) sandbox</div>
+      </div>
+      <div class="card">
+        <div class="card-label">Target Page</div>
+        <div class="card-value">Example Domain</div>
+        <div class="card-meta">https://example.com/</div>
+      </div>
+      <div class="card">
+        <div class="card-label">Lighthouse Audit</div>
+        <div class="card-value">Accessibility 96 · SEO 80</div>
+        <div class="card-meta">Best Practices: 100 / 100</div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-header">
+        <div class="panel-title">Automated Inspection & Live Generated Artifacts</div>
+      </div>
+      <div style="padding: 1.25rem;">
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.85rem;">
+          The autonomous agent orchestrated live browser navigation, DOM script evaluation, screenshot rendering, and a full Lighthouse audit:
+        </p>
+        <div class="downloads">
+          <a class="btn btn-primary" href="/artifacts/report.html" target="_blank">📊 Open Lighthouse Audit Report</a>
+          <a class="btn" href="/artifacts/report.json" target="_blank">📄 Inspect Audit JSON</a>
+          <a class="btn" href="/artifacts/screenshot.png" target="_blank">📸 Full Viewport Screenshot</a>
+        </div>
+        <div class="preview-box">
+          <img src="/artifacts/screenshot.png" alt="Live Page Viewport Screenshot" class="preview-img" />
+        </div>
+      </div>
+    </div>
+
+    <div class="terminal">
+      <div style="color: var(--text-muted); margin-bottom: 0.5rem; border-bottom: 1px solid #1e293b; padding-bottom: 0.25rem;"># Live Chrome DevTools Operator Execution Log</div>
+      <div><span class="term-cyan">[*]</span> chrome-devtools start <span class="term-yellow">--headless --isolated --no-usage-statistics</span></div>
+      <div style="color: #64748b; margin-left: 1.25rem;">[+] Daemon initialized (pid 16, v1.13.0, unprivileged node user)</div>
+      <div style="margin-top: 0.35rem;"><span class="term-cyan">[*]</span> chrome-devtools navigate_page 1 <span class="term-yellow">--url https://example.com</span></div>
+      <div style="color: #64748b; margin-left: 1.25rem;">[+] Target page navigated: "Example Domain" (https://example.com/)</div>
+      <div style="margin-top: 0.35rem;"><span class="term-cyan">[*]</span> chrome-devtools evaluate_script <span class="term-yellow">"() => document.title" --pageId 1</span></div>
+      <div style="color: #4ade80; margin-left: 1.25rem;">[+] Evaluated: "Example Domain"</div>
+      <div style="margin-top: 0.35rem;"><span class="term-cyan">[*]</span> chrome-devtools take_screenshot 1 <span class="term-yellow">--filePath /home/node/artifacts/screenshot.png</span></div>
+      <div style="color: #64748b; margin-left: 1.25rem;">[+] Viewport screenshot captured: 1280x720 PNG (saved to artifacts)</div>
+      <div style="margin-top: 0.35rem;"><span class="term-cyan">[*]</span> chrome-devtools lighthouse_audit 1 <span class="term-yellow">--outputDirPath /home/node/artifacts</span></div>
+      <div style="color: #4ade80; margin-left: 1.25rem;">[+] Lighthouse reports generated: report.html, report.json (Score: A11y 96, BP 100, SEO 80)</div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-header">
+        <div class="panel-title">MCP Client Configuration (Antigravity, Claude Code, Cursor)</div>
+      </div>
+      <div style="padding: 1.25rem;">
+        <div class="code-box">
+{
+  "mcpServers": {
+    "chrome-devtools": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "chrome-devtools-mcp@latest",
+        "--isolated",
+        "--no-usage-statistics",
+        "--no-update-checks"
+      ]
+    }
+  }
+}
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      Chrome DevTools for Agents v1.13.0 · Apache 2.0 License · Google LLC
+    </footer>
+  </div>
+</body>
+</html>

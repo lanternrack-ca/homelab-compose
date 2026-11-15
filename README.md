@@ -10,7 +10,7 @@ cp .env.example .env     # change every change-me value
 docker compose up -d
 ```
 
-## Apps (65)
+## Apps (66)
 
 | App | Tested version | Lab-tested | Guide |
 |---|---|---|---|
@@ -25,6 +25,7 @@ docker compose up -d
 | [Authentik](apps/authentik/) | 2026.8.5 | 2026-11-06 | [guide](https://lanternrack.ca/guides/authentik/) |
 | [Bazarr](apps/bazarr/) | v1.6.2-ls371 | 2026-11-06 | [guide](https://lanternrack.ca/guides/bazarr/) |
 | [Chatto](apps/chatto/) | — | — | [guide](https://lanternrack.ca/guides/chatto/) |
+| [Chrome DevTools MCP](apps/chrome-devtools-mcp/) | 1.13.0 | 2026-11-14 | [guide](https://lanternrack.ca/guides/chrome-devtools-mcp/) |
 | [Cinephage](apps/cinephage/) | — | — | [guide](https://lanternrack.ca/guides/cinephage/) |
 | [Claude-Mem](apps/claude-mem/) | 15.18.3 | 2026-11-14 | [guide](https://lanternrack.ca/guides/claude-mem/) |
 | [copyparty](apps/copyparty/) | v1.20.26 | 2026-11-11 | [guide](https://lanternrack.ca/guides/copyparty/) |
