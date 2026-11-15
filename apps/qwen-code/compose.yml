@@ -1,0 +1,25 @@
+services:
+  qwen-code:
+    image: ${IMG:-ghcr.io/qwenlm/qwen-code:0.27.3}
+    container_name: ${PROJ:-qwen-code}-web-shell
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:${HOST_PORT:-3000}:4170"
+    environment:
+      - NODE_ENV=production
+      - PORT=4170
+      - HOSTNAME=0.0.0.0
+      - HOME=/home/node
+      - QWEN_DISABLE_AUTO_UPDATE=1
+      - CI=1
+      - QWEN_SERVER_TOKEN=${QWEN_SERVER_TOKEN}
+    volumes:
+      - ${REPO:-../repo}:/workspace:rw
+    working_dir: /workspace
+    command: ["qwen", "serve", "--hostname", "0.0.0.0", "--port", "4170", "--token", "${QWEN_SERVER_TOKEN}", "--no-open"]
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS -H \"Authorization: Bearer ${QWEN_SERVER_TOKEN}\" http://127.0.0.1:4170/health || exit 1"]
+      interval: 3s
+      timeout: 2s
+      retries: 5
+      start_period: 2s

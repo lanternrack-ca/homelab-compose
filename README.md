@@ -10,7 +10,7 @@ cp .env.example .env     # change every change-me value
 docker compose up -d
 ```
 
-## Apps (73)
+## Apps (74)
 
 | App | Tested version | Lab-tested | Guide |
 |---|---|---|---|
@@ -64,6 +64,7 @@ docker compose up -d
 | [Prometheus](apps/prometheus/) | v3.15.1 | 2026-11-08 | [guide](https://lanternrack.ca/guides/prometheus/) |
 | [Prowlarr](apps/prowlarr/) | v2.7.0.5723 | 2026-11-06 | [guide](https://lanternrack.ca/guides/prowlarr/) |
 | [qBittorrent](apps/qbittorrent/) | v5.3.0 | 2026-11-06 | [guide](https://lanternrack.ca/guides/qbittorrent/) |
+| [Qwen Code and Its Web Shell](apps/qwen-code/) | 0.27.3 | 2026-11-15 | [guide](https://lanternrack.ca/guides/qwen-code/) |
 | [Radarr](apps/radarr/) | — | — | [guide](https://lanternrack.ca/guides/radarr/) |
 | [RdtClient](apps/rdt-client/) | 2.0.143.0 | 2026-11-08 | [guide](https://lanternrack.ca/guides/rdt-client/) |
 | [RuView](apps/ruview/) | 0.3.5 | 2026-11-15 | [guide](https://lanternrack.ca/guides/ruview/) |
