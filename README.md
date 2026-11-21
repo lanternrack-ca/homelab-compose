@@ -10,7 +10,7 @@ cp .env.example .env     # change every change-me value
 docker compose up -d
 ```
 
-## Apps (77)
+## Apps (78)
 
 | App | Tested version | Lab-tested | Guide |
 |---|---|---|---|
@@ -49,6 +49,7 @@ docker compose up -d
 | [Immich](apps/immich/) | v3.3.6 | 2026-11-08 | [guide](https://lanternrack.ca/guides/immich/) |
 | [Infisical](apps/infisical/) | — | — | [guide](https://lanternrack.ca/guides/infisical/) |
 | [Jellyfin](apps/jellyfin/) | 12.4.0 | 2026-11-06 | [guide](https://lanternrack.ca/guides/jellyfin/) |
+| [Karakeep](apps/karakeep/) | v0.35.0 | 2026-11-21 | [guide](https://lanternrack.ca/guides/karakeep/) |
 | [Kavita](apps/kavita/) | v0.9.1.4 | 2026-11-11 | [guide](https://lanternrack.ca/guides/kavita/) |
 | [Kestra](apps/kestra/) | — | — | [guide](https://lanternrack.ca/guides/kestra/) |
 | [LightPost, a One-Dashboard Social Media Scheduler,](apps/lightpost/) | — | — | [guide](https://lanternrack.ca/guides/lightpost/) |
