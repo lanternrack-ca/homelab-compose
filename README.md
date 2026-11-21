@@ -10,7 +10,7 @@ cp .env.example .env     # change every change-me value
 docker compose up -d
 ```
 
-## Apps (76)
+## Apps (77)
 
 | App | Tested version | Lab-tested | Guide |
 |---|---|---|---|
@@ -37,6 +37,7 @@ docker compose up -d
 | [DockFlare](apps/dockflare/) | — | — | [guide](https://lanternrack.ca/guides/dockflare/) |
 | [Dockpeek](apps/dockpeek/) | — | — | [guide](https://lanternrack.ca/guides/dockpeek/) |
 | [Dozzle](apps/dozzle/) | — | — | [guide](https://lanternrack.ca/guides/dozzle/) |
+| [Firecrawl](apps/firecrawl/) | 2.11.810 | 2026-11-21 | [guide](https://lanternrack.ca/guides/firecrawl/) |
 | [Glance](apps/glance/) | — | — | [guide](https://lanternrack.ca/guides/glance/) |
 | [Grafana](apps/grafana/) | 13.3.0 | 2026-11-08 | [guide](https://lanternrack.ca/guides/grafana/) |
 | [Grimoire](apps/grimoire/) | — | — | [guide](https://lanternrack.ca/guides/grimoire/) |
